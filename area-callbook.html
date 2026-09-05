@@ -21,6 +21,7 @@ header h1{margin:0;font-size:1.1rem}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .card .name{font-weight:700}
 .card .num{color:var(--gray);font-size:.9rem;margin-bottom:8px}
+.remarks{background:var(--bg);border:1px dashed #f2c6cd;border-radius:6px;padding:4px 8px;font-size:.85rem;color:var(--red-dark);margin-bottom:8px}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 button{border:none;border-radius:6px;padding:8px 12px;font-weight:600;cursor:pointer;flex:1;min-width:90px;transition:transform .12s,opacity .12s}
 button:active{transform:scale(.96)}
@@ -46,11 +47,11 @@ button:active{transform:scale(.96)}
 <h1>📞 Area Callbook</h1>
 </header>
 
-<!-- <div id="cfg"> -->
-<!-- <label>ℹ️ CSV links are set inside the code (see CSV_LINKS array in &lt;script&gt;)</label> -->
-<!-- <div class="hint">Each sheet needs columns: SlNo, Zone, Area, Name, Number</div> -->
+<div id="cfg">
+<label>ℹ️ CSV links are set inside the code (see CSV_LINKS array in &lt;script&gt;)</label>
+<div class="hint">Each sheet needs columns: SlNo, Zone, Area, Name, Number, Remarks</div>
 <button class="callBtn" onclick="loadAll()">🔄 Refresh Data</button>
-
+</div>
 
 <div id="tabs"></div>
 <div id="areaTitle"></div>
@@ -106,7 +107,8 @@ async function loadAll(){
           zone:(r.Zone||r.zone||"").toString().trim(),
           area:(r.Area||r.area||"").toString().trim(),
           name:(r.Name||r.name||"").trim(),
-          number:(r.Number||r.number||"").toString().trim()
+          number:(r.Number||r.number||"").toString().trim(),
+          remarks:(r.Remarks||r.remarks||"").toString().trim()
         });
       });
     }catch(e){ console.warn("Failed to load", url, e); }
@@ -137,6 +139,7 @@ function render(){
     return `<div class="card">
       <div class="name"><span class="sl">${c.sl?("#"+c.sl):""}</span>${c.name||"Unnamed"}</div>
       <div class="num">${c.number}</div>
+      ${c.remarks?`<div class="remarks">📝 ${c.remarks}</div>`:""}
       <div class="row">
         <a href="tel:${c.number}"><button class="callBtn">📞 Call</button></a>
         <button class="ok" onclick="setStatus('${c.number}','success')">✅ Success</button>
